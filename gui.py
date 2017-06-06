@@ -46,3 +46,4 @@ conv.pack(side=RIGHT)
 
 
 root.mainloop()
+os.system("pause")
