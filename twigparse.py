@@ -38,22 +38,25 @@ def parse(code):
     vardict = dict()
     script = False
     ret = ""
+    med= ""
 
     for line in code.splitlines():
 
+        #jump lines if necessary
+        for i in range (len(line)):
+            if(line[i] == "{" and line[i-1] == "}"):
+                line = line[:i] + "\n" + line[i:]
+        med += "\n" + line
+    print(med)
 
 
-
+    for line in med.splitlines():
 
         #script detection
         if(re.search(r"<script type=\"text/javascript\">",line)):
             script = True
         if(re.search(r"</script>",line)):
             script = False
-
-
-
-
 
         #var declarations
         m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}></flexy:toJavascript>",line)
@@ -66,11 +69,15 @@ def parse(code):
 
 
         #loops/conditions handler
+
+        #if
         if(re.search(r"({if)", line)):
             currentbox.append("if")
+
         if(re.search(r"({foreach)", line)):
             ex = re.split('foreach|\t|,|:|{|}|\n',line)
-            ex = [x for x in ex if x != '']
+            ex = [x for x in ex if x.replace(" ", "") != '']
+            print(ex)
             res = '{ for ' + ex[1]
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
