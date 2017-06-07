@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+{% block content %}
+
+
+<div class="col-md-6">
+    <form action="/data" method="post">
+      <div class="form-group">
+        <label for="flexycode">Flexy Code</label>
+        <textarea class="form-control" id="flexycode" name="flexycode" rows="30">{% if flex %} {{flex}} {% else %} Give me some Flexy {% endif %}</textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Convert</button>
+    </form>
+</div>
+
+
+<label for="twigcode">Twig Code</label>
+<div class="col-md-6" id="twigcode">
+
+{% if res %}
+<textarea class="form-control" rows="30">
+    {{res}}
+</textarea>
+
+{% else %}
+<textarea class="form-control" rows="30">
+
+ I'll give you some Twig
+ </textarea>
+
+
+{% endif %}
+
+
+
+</div>
+
+
+
+
+{% endblock %}

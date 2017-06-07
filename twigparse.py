@@ -32,25 +32,40 @@ def difflog(fin,fout):
                             file_out.write("FLEXY : " + l1 +  " \n====TWIG====> " + l2 + "\n\n--------------------------------------------------------------")
 
 
-def parse(fin,fout):
-    f = open(fin, 'r')
-    o = open(fout, 'w')
+def parse(code):
 
     currentbox = deque()
     vardict = dict()
     script = False
+    ret = ""
 
-    for line in f:
+    for line in code.splitlines():
+
+
+
+
+
+        #script detection
         if(re.search(r"<script type=\"text/javascript\">",line)):
             script = True
         if(re.search(r"</script>",line)):
             script = False
+
+
+
+
+
+        #var declarations
         m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}></flexy:toJavascript>",line)
         if(m):
             line = ""
             m.groupdict()
-            vardict.update({m['var_name'] :  m['var_value']})
+            vardict.update({m['var_name'] : m['var_value']})
 
+
+
+
+        #loops/conditions handler
         if(re.search(r"({if)", line)):
             currentbox.append("if")
         if(re.search(r"({foreach)", line)):
@@ -63,6 +78,11 @@ def parse(fin,fout):
             line = re.sub(r"({foreach:)(.*)[}]+", res, line)
             currentbox.append("for")
 
+
+
+
+
+        #not script handler
         if(not script):
             line = re.sub(r"[:]", " ", line)
             line = re.sub(r"[{]", "{% ", line)
@@ -72,10 +92,18 @@ def parse(fin,fout):
             line = re.sub(r"<flexy include src=", "{% include ", line)
             line = re.sub(r"></flexy include>", " %}", line)
             line = re.sub(r"\#", "\"", line)
+
+
+
+
+
+        #script handler
         if(script):
             for key in vardict:
                 line = re.sub(r"(" + re.escape(key) + r")", "{{ " + vardict[key] + " }}", line)
 
 
 
-        o.write(line)
+
+        ret += "\n" + line
+    return ret

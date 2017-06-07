@@ -1,0 +1,2 @@
+/account/account.tpl
+/tracker/google_conversion.tpl

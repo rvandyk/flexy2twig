@@ -33,7 +33,9 @@ def loadfileout():
     urlout.set(filedialog.askdirectory())
 
 
-
+ """
+ File loading converter
+ """
 labelin = Label(root, text="Flexy file path :")
 butin = Button(root, text = "Parcourir", command = loadfilein)
 urlin = StringVar(root,"/")
@@ -57,6 +59,12 @@ pathout.pack(side=LEFT)
 butout.pack(side=LEFT)
 c.pack(side=BOTTOM)
 conv.pack(side=BOTTOM)
+
+
+"""
+C/P converter
+"""
+
 
 
 

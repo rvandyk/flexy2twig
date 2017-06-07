@@ -1,0 +1,94 @@
+<!-- Google conversion -->
+{% if !String.strcmp("/index.php",request.php_self) %}
+	<!-- Page d'accueil -->
+	<script type="text/javascript">
+		var google_tag_params = {
+			ecomm_prodid: '',
+			ecomm_pagetype: 'home',
+			ecomm_totalvalue: ''
+		};
+	</script>
+{% else  %}
+	{% if !String.strcmp("/catalog/product_one.php",request.php_self) %}
+		{% if product.lowerPriceET %}
+			<!-- Fiche produit ayant un prix -->
+			<script type="text/javascript">
+				var google_tag_params = {
+					ecomm_prodid: {{ product.id }},
+					ecomm_pagetype: 'product',
+					ecomm_totalvalue: {{ product.lowerPriceET }}
+				};
+			</script>
+		{% else  %}
+			<!-- Fiche produit sans prix -->
+			<script type="text/javascript">
+				var google_tag_params = {
+					ecomm_prodid: {{ product.id }},
+					ecomm_pagetype: 'product',
+					ecomm_totalvalue: ''
+				};
+			</script>
+		{% endif  %}
+	{% else  %}
+		{% if !String.strcmp("/catalog/product.php",request.php_self) %}
+			{% if category.id %}
+				<!-- Catégories -->
+				<script type="text/javascript">
+					var google_tag_params = {
+						ecomm_prodid: {{ category.id }},
+						ecomm_pagetype: 'category',
+						ecomm_totalvalue: ''
+					};
+				</script>
+			{% else  %}
+				<!-- Toutes les autres pagesssss -->
+				<script type="text/javascript">
+					var google_tag_params = {
+						ecomm_prodid: '',
+						ecomm_pagetype: 'siteview',
+						ecomm_totalvalue: ''
+					};
+				</script>
+			{% endif  %}
+		{% else  %}
+			{% if !String.strcmp("/catalog/basket.php",request.php_self) %}
+				<!-- Panier -->
+				{% stack.reset() %}
+				{%  for item in basket.items  %}
+				    {% stack.push(item.article.idproduct) %}
+				{% endfor  %}
+
+				<script type="text/javascript">
+					var google_tag_params = {
+						ecomm_prodid: {{ stack.toArray() }},
+						ecomm_pagetype: 'cart',
+						ecomm_totalvalue: {{ basket.getTotalATI() }}
+					};
+				</script>
+			{% else  %}
+				<!-- Toutes les autres pages -->
+				<script type="text/javascript">
+					var google_tag_params = {
+						ecomm_prodid: '',
+						ecomm_pagetype: 'siteview',
+						ecomm_totalvalue: ''
+					};
+				</script>
+			{% endif  %}
+		{% endif  %}
+	{% endif  %}
+{% endif  %}
+
+<script type="text/javascript">
+	var google_conversion_id = 1062519530;
+	var google_conversion_label = "PQzRCLLHtAIQ6oXT-gM";
+	var google_custom_params = window.google_tag_params;
+	var google_remarketing_only = true;
+</script>
+
+<script async type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+<noscript>
+	<div>
+		<img height="1" width="1" alt="Google conversion" src="//www.google.fr/ads/conversion/1062519530/?value=0&amp;label=PQzRCLLHtAIQ6oXT-gM&amp;guid=ON&amp;script=0" />
+	</div>
+</noscript>
