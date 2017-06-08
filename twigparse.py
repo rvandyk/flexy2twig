@@ -84,6 +84,13 @@ def parse(code):
             line = re.sub(r"({foreach:)(.*)[}]+", res, line)
             currentbox.append("for")
 
+        #if in tags
+        s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>.+)\")",line)
+        if(s):
+            line = re.sub(r"(flexy:if=\"(.+)\")", "", line)
+            line = "{if " + s['args'] + "}" + "\n" + line
+            foreachbox[s['tag']].append('if')
+
         #foreach in tags
         s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>.+)\")",line)
         if(s):
@@ -95,20 +102,20 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
-            print(foreachbox)
+
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
         if(s and foreachbox and (s['tag'] in foreachbox)):
             foreachbox[s['tag']].append('')
-            print(foreachbox)
+
 
         s = re.search(r"(</(?P<tag>.+)>)", line)
         if(s and foreachbox and (s['tag'] in foreachbox)):
             d = foreachbox[s['tag']].pop()
             if(d != ''):
                 line = line + "\n" + "{ end" + d + " }"
-        print(foreachbox)
+
 
 
 
