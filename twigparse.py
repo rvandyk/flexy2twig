@@ -35,6 +35,7 @@ def difflog(fin,fout):
 def parse(code):
 
     currentbox = deque()
+    foreachbox = deque()
     vardict = dict()
     script = False
     ret = ""
@@ -65,25 +66,40 @@ def parse(code):
             m.groupdict()
             vardict.update({m['var_name'] : m['var_value']})
 
-
-
-
         #loops/conditions handler
 
         #if
         if(re.search(r"({if)", line)):
             currentbox.append("if")
 
+        #foreach
         if(re.search(r"({foreach)", line)):
             ex = re.split('foreach|\t|,|:|{|}|\n',line)
             ex = [x for x in ex if x.replace(" ", "") != '']
-            print(ex)
             res = '{ for ' + ex[1]
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
             line = re.sub(r"({foreach:)(.*)[}]+", res, line)
             currentbox.append("for")
+
+        #foreach in tags
+        s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>.+)\")",line)
+        if(s):
+            line = re.sub(r"(flexy:foreach=\"(.+)\")", "", line)
+            ex = re.split(',', s['args'])
+            res = '{ for ' + ex[1]
+            for i in range (2,len(ex)):
+                res += ','+ ex[i]
+            res += ' in ' + ex[0] + " }"
+            line = res + '\n' + line
+            foreachbox.append(('for',s['tag']))
+            print(foreachbox)
+
+        #close tag
+        if(foreachbox and re.search(r"(</" + foreachbox[0][1] + ")", line)):
+            line = line + "\n" + "{ end" + foreachbox[0][0] + " }"
+            foreachbox.pop()
 
 
 
