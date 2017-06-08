@@ -24,7 +24,7 @@ if(len(sys.argv) == 4):
                     f_in.close()
                     f_out.close()
 
-elif(len(sys.argv) == 2 and sys.argv[2] == '-s'):
+elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
     app = Flask(__name__)
 
