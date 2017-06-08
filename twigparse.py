@@ -49,7 +49,7 @@ def parse(code):
         for i in range (len(line)):
             if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
                 line = line[:i] + "\n" + line[i:]
-        med += "\n" + line
+        med += line + "\n"
 
 
 
@@ -103,7 +103,7 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
-        
+
 
 
         #close tag
