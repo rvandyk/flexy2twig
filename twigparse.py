@@ -46,10 +46,10 @@ def parse(code):
 
         #jump lines if necessary
         for i in range (len(line)):
-            if(line[i] == "{" and line[i-1] == "}"):
+            if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
                 line = line[:i] + "\n" + line[i:]
         med += "\n" + line
-    print(med)
+
 
 
     for line in med.splitlines():
@@ -85,11 +85,11 @@ def parse(code):
             currentbox.append("for")
 
         #if in tags
-        s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>.+)\")",line)
-        if(s):
+        t = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>.+)\")",line)
+        if(t):
             line = re.sub(r"(flexy:if=\"(.+)\")", "", line)
-            line = "{if " + s['args'] + "}" + "\n" + line
-            foreachbox[s['tag']].append('if')
+            line = "{if " + t['args'] + "}" + "\n" + line
+            foreachbox[t['tag']].append('if')
 
         #foreach in tags
         s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>.+)\")",line)
@@ -102,6 +102,7 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
+        print(foreachbox)
 
 
         #close tag
