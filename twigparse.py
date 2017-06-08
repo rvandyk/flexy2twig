@@ -2,6 +2,7 @@ import re
 from collections import deque
 from collections import defaultdict
 
+
 def difflog(fin,fout):
     n = 0
     with open(fin, 'r') as file1:
@@ -119,7 +120,11 @@ def parse(code):
 
 
 
-
+        #filters
+        line = re.sub(r"(:h)", "|raw", line)
+        line = re.sub(r"(:u)", "|urlencode", line)
+        line = re.sub(r"(:n)", "|number_format", line)
+        line = re.sub(r"(:b)", "|nl2br", line)
 
 
 
@@ -146,5 +151,6 @@ def parse(code):
 
 
 
-        ret += "\n" + line
+        ret += line + "\n"
+
     return ret
