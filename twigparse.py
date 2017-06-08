@@ -103,7 +103,7 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
-        print(foreachbox)
+        
 
 
         #close tag
