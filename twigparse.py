@@ -1,5 +1,6 @@
 import re
 from collections import deque
+from collections import defaultdict
 
 def difflog(fin,fout):
     n = 0
@@ -35,7 +36,7 @@ def difflog(fin,fout):
 def parse(code):
 
     currentbox = deque()
-    foreachbox = deque()
+    foreachbox = defaultdict(deque)
     vardict = dict()
     script = False
     ret = ""
@@ -93,13 +94,22 @@ def parse(code):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
-            foreachbox.append(('for',s['tag']))
+            foreachbox[s['tag']].append('for')
             print(foreachbox)
 
         #close tag
-        if(foreachbox and re.search(r"(</" + foreachbox[0][1] + ")", line)):
-            line = line + "\n" + "{ end" + foreachbox[0][0] + " }"
-            foreachbox.pop()
+        s = re.search(r"(<(?P<tag>.+)>)", line)
+        if(s and foreachbox and (s['tag'] in foreachbox)):
+            foreachbox[s['tag']].append('')
+            print(foreachbox)
+
+        s = re.search(r"(</(?P<tag>.+)>)", line)
+        if(s and foreachbox and (s['tag'] in foreachbox)):
+            d = foreachbox[s['tag']].pop()
+            if(d != ''):
+                line = line + "\n" + "{ end" + d + " }"
+        print(foreachbox)
+
 
 
 
