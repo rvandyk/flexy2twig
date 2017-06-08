@@ -11,7 +11,7 @@ if(len(sys.argv) == 4):
         for dirpath, dirnames, files in os.walk(topdir):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
-                if name.lower().endswith(exten):
+                if name.lower().endswith(exten):                    
                     f_in = open(os.path.join(dirpath, name),'r')
 
                     if(not os.path.exists(sys.argv[3] +'/' + dirpath)):
