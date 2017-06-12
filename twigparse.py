@@ -113,7 +113,7 @@ def parse(code):
         s = re.search(r"(<(?P<tag>.+)>)", line)
         print(s)
         if(s):
-            if('tag' in s):
+            if('tag' in s.groupdict()):
                 if((s['tag'] in foreachbox)):
                     foreachbox[s['tag']].append('')
 
