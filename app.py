@@ -7,17 +7,24 @@ from tqdm import tqdm
 if(len(sys.argv) == 4):
     if(sys.argv[1] == '-c'):
         topdir = sys.argv[2]
+        print(topdir)
         exten = '.tpl'
         for dirpath, dirnames, files in os.walk(topdir):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
-                if name.lower().endswith(exten):                    
+                if name.lower().endswith(exten):
                     f_in = open(os.path.join(dirpath, name),'r')
+                    p = os.path.basename(os.path.normpath(dirpath))
 
-                    if(not os.path.exists(sys.argv[3] +'/' + dirpath)):
-                        os.makedirs(sys.argv[3] +'/' + dirpath)
 
-                    f_out = open(sys.argv[3] +'/' + dirpath +'/'+name,'w')
+                    if(not os.path.exists(sys.argv[3] +'/' + p) and (p != topdir)):
+                        os.makedirs(sys.argv[3] +'/' + p)
+
+                    if(p != topdir):
+                        f_out = open(sys.argv[3] +'/' + p +'/'+name,'w')
+                    else:
+                        f_out = open(sys.argv[3] +'/' + name,'w')
+
 
 
                     f_out.write(parse(f_in.read()))
