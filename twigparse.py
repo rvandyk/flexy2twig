@@ -122,9 +122,9 @@ def parse(code):
         if(s):
             s = s.groupdict()
             if(foreachbox[s['tag']]):
-            d = foreachbox[s['tag']].pop()
-            if(d != ''):
-                line = line + "\n" + "{ end" + d + " }"
+                d = foreachbox[s['tag']].pop()
+                if(d != ''):
+                    line = line + "\n" + "{ end" + d + " }"
 
 
 
