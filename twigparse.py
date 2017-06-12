@@ -104,7 +104,7 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
-	    
+
 
 
 
@@ -112,12 +112,12 @@ def parse(code):
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
         if(s):
-	    if((s['tag'] in foreachbox)):
-	        foreachbox[s['tag']].append('')
+            if((s['tag'] in foreachbox)):
+                foreachbox[s['tag']].append('')
 
 
         s = re.search(r"(</(?P<tag>.+)>)", line)
-        if(s and (foreachbox[s['tag']])):            
+        if(s and (foreachbox[s['tag']])):
             d = foreachbox[s['tag']].pop()
             if(d != ''):
                 line = line + "\n" + "{ end" + d + " }"
