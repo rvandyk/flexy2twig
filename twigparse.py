@@ -158,5 +158,6 @@ def parse(code):
 
 
         ret += line + "\n"
+        print(ret)
 
     return ret
