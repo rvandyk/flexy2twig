@@ -89,6 +89,7 @@ def parse(code):
         #if in tags
         t = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>.+)\")",line)
         if(t):
+            t = t.groupdict()
             line = re.sub(r"(flexy:if=\"(.+)\")", "", line)
             line = "{if " + t['args'] + "}" + "\n" + line
             foreachbox[t['tag']].append('if')
@@ -96,6 +97,7 @@ def parse(code):
         #foreach in tags
         s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>.+)\")",line)
         if(s):
+            s = s.groupdict()
             line = re.sub(r"(flexy:foreach=\"(.+)\")", "", line)
             ex = re.split(',', s['args'])
             res = '{ for ' + ex[1]
