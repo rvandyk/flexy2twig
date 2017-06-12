@@ -1,3 +1,4 @@
+#coding: latin-1
 from flask import Flask, render_template, request
 from twigparse import parse
 import sys
@@ -13,7 +14,7 @@ if(len(sys.argv) == 4):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
                 if name.lower().endswith(exten):
-                    f_in = open(os.path.join(dirpath, name),'r')
+                    f_in = open(os.path.join(dirpath, name),'r',encoding='iso8859-15')
                     p = os.path.basename(os.path.normpath(dirpath))
 
 

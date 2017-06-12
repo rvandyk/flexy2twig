@@ -1,3 +1,4 @@
+#coding: latin-1
 import re
 from collections import deque
 from collections import defaultdict
@@ -103,14 +104,16 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
             foreachbox[s['tag']].append('for')
+	    
 
 
 
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
-        if(s and (s['tag'] in foreachbox)):
-            foreachbox[s['tag']].append('')
+        if(s):
+	    if((s['tag'] in foreachbox)):
+	        foreachbox[s['tag']].append('')
 
 
         s = re.search(r"(</(?P<tag>.+)>)", line)
