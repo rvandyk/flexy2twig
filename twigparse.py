@@ -111,7 +111,7 @@ def parse(code):
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
-        if(s):
+        if('tag' in s):
             if((s['tag'] in foreachbox)):
                 foreachbox[s['tag']].append('')
 

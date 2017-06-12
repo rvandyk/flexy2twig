@@ -14,7 +14,7 @@ if(len(sys.argv) == 4):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
                 if name.lower().endswith(exten):
-                    f_in = open(os.path.join(dirpath, name),'r',encoding='iso8859-15')
+                    f_in = open(os.path.join(dirpath, name),'r')
                     p = os.path.basename(os.path.normpath(dirpath))
 
 
