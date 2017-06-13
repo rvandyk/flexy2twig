@@ -73,6 +73,7 @@ def parse(code):
 
         #if
         if(re.search(r"({if)", line)):
+            line = re.sub(r"(!)", " not ", line)
             currentbox.append("if")
 
         #foreach
@@ -135,19 +136,44 @@ def parse(code):
         line = re.sub(r"(:u)", "|urlencode", line)
         line = re.sub(r"(:n)", "|number_format", line)
         line = re.sub(r"(:b)", "|nl2br", line)
-
-
+        line = re.sub(r"(:float)", "|bao_float", line)
+        line = re.sub(r"(:int)", "|bao_int", line)
+        line = re.sub(r"(:date)", "|bao_date", line)
+        line = re.sub(r"(:time)", "|bao_time", line)
+        line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
+        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)
+        line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
+        line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
+        line = re.sub(r"(:trim)", "|bao_trim", line)
+        line = re.sub(r"(:text)", "|bao_text", line)
+        line = re.sub(r"(:length)", "|bao_length", line)
+        line = re.sub(r"(:phone)", "|bao_phone", line)
+        line = re.sub(r"(:price)", "|bao_price", line)
+        line = re.sub(r"(:rate)", "|bao_rate", line)
+        line = re.sub(r"(:hidden)", "|bao_hidden", line)
+        line = re.sub(r"(:visible)", "|bao_visible", line)
 
         #not script handler
         if(not script):
             line = re.sub(r"[:]", " ", line)
-            line = re.sub(r"[{]", "{% ", line)
-            line = re.sub(r"[}]", " %}", line)
+            if(re.search(r"{",line)):
+                if((re.search(r"\(|\)|for|if|end", line))):
+                    line = re.sub(r"[{]", "{% ", line)
+                    line = re.sub(r"[}]", " %}", line)
+                else:
+                    line = re.sub(r"[{]", "{{ ", line)
+                    line = re.sub(r"[}]", " }}", line)
+
+
             if(re.search(r"({% end)",line)):
                 line = re.sub(r"({% end)", "{% end" + currentbox.pop(), line)
-            line = re.sub(r"<flexy include src=", "{% include ", line)
-            line = re.sub(r"></flexy include>", " %}", line)
+            m = re.search(r"<flexy include src=(?P<src>.+)>",line)
+            if(m):
+                m = m.groupdict()
+                line = "{% include " + m['src'] +  " %}"
+            line = re.sub("</flexy include>", "", line)
             line = re.sub(r"\#", "\"", line)
+
 
 
 
