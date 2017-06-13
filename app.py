@@ -10,6 +10,9 @@ if(len(sys.argv) == 4):
         topdir = sys.argv[2]
         print(topdir)
         exten = '.tpl'
+        if(not os.path.exists(sys.argv[3])):
+            os.makedirs(sys.argv[3])
+
         for dirpath, dirnames, files in os.walk(topdir):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
@@ -18,10 +21,10 @@ if(len(sys.argv) == 4):
                     p = os.path.basename(os.path.normpath(dirpath))
 
 
-                    if(not os.path.exists(sys.argv[3] +'/' + p) and (p != topdir)):
+                    if(not os.path.exists(sys.argv[3] +'/' + p) and (p != os.path.basename(os.path.normpath(topdir)))):
                         os.makedirs(sys.argv[3] +'/' + p)
 
-                    if(p != topdir):
+                    if(p != os.path.basename(os.path.normpath(topdir))):
                         f_out = open(sys.argv[3] +'/' + p +'/'+name,'w')
                     else:
                         f_out = open(sys.argv[3] +'/' + name,'w')
