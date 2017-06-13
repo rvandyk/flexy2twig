@@ -145,7 +145,7 @@ def parse(code):
         line = re.sub(r"(:int)", "|bao_int", line)
         line = re.sub(r"(:date)", "|bao_date", line)
         line = re.sub(r"(:time)", "|bao_time", line)
-        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)        
+        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)
         line = re.sub(r"(:trim)", "|bao_trim", line)
         line = re.sub(r"(:text)", "|bao_text", line)
         line = re.sub(r"(:length)", "|bao_length", line)
@@ -159,7 +159,7 @@ def parse(code):
         if(not script):
             line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
-                if((re.search(r"\(|\)|for|if|end", line))):
+                if((re.search(r"\(|\)|for|if|end|else", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
                 else:
