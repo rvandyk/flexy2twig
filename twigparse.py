@@ -132,7 +132,12 @@ def parse(code):
 
 
         #filters
+
         line = re.sub(r"(:h)", "|raw", line)
+
+        line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
+        line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
+        line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
         line = re.sub(r"(:u)", "|urlencode", line)
         line = re.sub(r"(:n)", "|number_format", line)
         line = re.sub(r"(:b)", "|nl2br", line)
@@ -140,10 +145,7 @@ def parse(code):
         line = re.sub(r"(:int)", "|bao_int", line)
         line = re.sub(r"(:date)", "|bao_date", line)
         line = re.sub(r"(:time)", "|bao_time", line)
-        line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
-        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)
-        line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
-        line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
+        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)        
         line = re.sub(r"(:trim)", "|bao_trim", line)
         line = re.sub(r"(:text)", "|bao_text", line)
         line = re.sub(r"(:length)", "|bao_length", line)
