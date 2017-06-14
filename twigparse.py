@@ -131,11 +131,9 @@ def parse(code):
                     line = line + "\n" + "{ end" + d + " }"
 
 
-
         #filters
 
         line = re.sub(r"(:h)", "|raw", line)
-
         line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
         line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
         line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
@@ -158,7 +156,9 @@ def parse(code):
 
         #not script handler
         if(not script):
-            line = re.sub(r"[:]", " ", line)
+            if(re.search(r"[:]",line)):
+                if(not(re.search(r"\"(.*)[:](.*)\"", line))):
+                    line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
                 if((re.search(r"for|if|end|else", line))):
                     line = re.sub(r"[{]", "{% ", line)
@@ -175,7 +175,9 @@ def parse(code):
                 m = m.groupdict()
                 line = "{{ include (" + m['src'] +  ") }}"
             line = re.sub("</flexy include>", "", line)
-            line = re.sub(r"\#", "\"", line)
+            if(re.search(r"[#]",line)):
+                if(not(re.search(r"\"(.*)[#](.*)\"", line))):                    
+                    line = re.sub(r"\#", "\"", line)
 
 
 
