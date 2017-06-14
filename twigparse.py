@@ -38,6 +38,7 @@ def difflog(fin,fout):
 
 def parse(code):
 
+
     currentbox = deque()
     foreachbox = defaultdict(deque)
     vardict = dict()
@@ -53,6 +54,7 @@ def parse(code):
                 #line = line[:i] + "\n" + line[i:]
         if(re.search(r"({(.*)}(.*){(.*)})+",line) or re.search(r"(<(.*)>(.*)<(.*)>)+",line)):
             line = re.sub("{", "\n{", line)
+            line = re.sub("<", "\n<", line)
         med += line + "\n"
 
 
