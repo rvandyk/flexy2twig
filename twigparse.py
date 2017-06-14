@@ -99,7 +99,11 @@ def parse(code):
             t = t.groupdict()
             line = re.sub(r"(flexy:if=\"([^\"]+)\")", "", line)
             t['args'] = re.sub(r"!","not ", t['args'])
-            line = "{if " + t['args'] + "}" + "\n" + line + "\n{endif}"
+            if(t['tag'] == "meta"):
+                line = "{if " + t['args'] + "}" + "\n" + line + "\n{endif}"
+            else:
+                line = "{if " + t['args'] + "}" + "\n" + line
+                foreachbox[t['tag']].append('if')
 
 
         #foreach in tags
@@ -112,7 +116,11 @@ def parse(code):
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
-            line = res + '\n' + line + "\n{endfor}"
+            if(s['tag'] == "meta"):
+                line = res + '\n' + line + "\n{endfor}"
+            else:
+                line = res + '\n' + line
+                foreachbox[s['tag']].append('for')
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
