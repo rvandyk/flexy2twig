@@ -38,7 +38,6 @@ def difflog(fin,fout):
 
 def parse(code):
 
-
     currentbox = deque()
     foreachbox = defaultdict(deque)
     vardict = dict()
@@ -52,8 +51,9 @@ def parse(code):
         #for i in range (len(line)):
             #if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
                 #line = line[:i] + "\n" + line[i:]
-        if(re.search(r"({(.*)}(.*){(.*)})+",line) or re.search(r"(<(.*)>(.*)<(.*)>)+",line)):
+        if(re.search(r"({(.*)}(.*){(.*)})+",line)):
             line = re.sub("{", "\n{", line)
+        if(re.search(r"(<(.*)>(.*)<(.*)>)+",line)):
             line = re.sub("<", "\n<", line)
         med += line + "\n"
 
@@ -114,11 +114,6 @@ def parse(code):
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line + "\n{endfor}"
 
-
-
-
-
-
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
         if(s):
@@ -174,7 +169,7 @@ def parse(code):
                     line = re.sub(r"[}]", " }}", line)
 
 
-            if(re.search(r"({% end %})",line)):
+            if(re.search(r"({% end  %})",line)):
                 line = re.sub(r"({% end)", "{% end" + currentbox.pop(), line)
             m = re.search(r"<flexy include src=(?P<src>.+)>",line)
             if(m):
