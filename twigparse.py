@@ -160,7 +160,7 @@ def parse(code):
         if(not script):
             line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
-                if((re.search(r"\(|\)|for|if|end|else", line))):
+                if((re.search(r"for|if|end|else", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
                 else:
@@ -173,7 +173,7 @@ def parse(code):
             m = re.search(r"<flexy include src=(?P<src>.+)>",line)
             if(m):
                 m = m.groupdict()
-                line = "{% include " + m['src'] +  " %}"
+                line = "{{ include " + m['src'] +  " }}"
             line = re.sub("</flexy include>", "", line)
             line = re.sub(r"\#", "\"", line)
 
