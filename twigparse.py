@@ -161,7 +161,7 @@ def parse(code):
                 if(not(re.search(r"\"(.*)[:](.*)\"", line))):
                     line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
-                if((re.search(r"for|if|end|else", line))):
+                if((re.search(r"for |if |end |else ", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
                 else:
