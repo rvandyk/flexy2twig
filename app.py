@@ -1,4 +1,4 @@
-#coding: latin-1
+#coding: iso8859-15
 from flask import Flask, render_template, request
 from twigparse import parse
 import sys
