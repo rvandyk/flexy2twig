@@ -66,7 +66,7 @@ def parse(code):
         m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}></flexy:toJavascript>",line)
         if(m):
             line = ""
-            m.groupdict()
+            m = m.groupdict()
             vardict.update({m['var_name'] : m['var_value']})
 
         #loops/conditions handler
