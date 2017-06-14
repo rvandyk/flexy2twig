@@ -97,7 +97,7 @@ def parse(code):
             foreachbox[t['tag']].append('if')
 
         #foreach in tags
-        s = re.search(r"(<)(?P<tag>[^\s]+)((?P<argstag1>.*))(flexy:foreach=\"(?P<args>.+)\")(?P<argstag2>.*)",line)
+        s = re.search(r"(<)(?P<tag>[^\s]+)(?P<argstag1>.*)(flexy:foreach=\"(?P<args>.+)\")(?P<argstag2>.*)",line)
         if(s):
             s = s.groupdict()
             line = re.sub(r"(flexy:foreach=\"(.+)\")", "", line)
@@ -107,7 +107,7 @@ def parse(code):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line
-            line += t['argstag1'] + t['argstag2']
+            line += s['argstag1'] + s['argstag2']
             foreachbox[s['tag']].append('for')
 
 
