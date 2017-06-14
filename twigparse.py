@@ -1,4 +1,4 @@
-#coding: latin-1
+#coding: iso8859-15
 import re
 from collections import deque
 from collections import defaultdict
@@ -63,8 +63,9 @@ def parse(code):
             script = False
 
         #var declarations
-        m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}></flexy:toJavascript>",line)
-        if(m):
+        m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}>",line)
+        line = re.sub(r"</flexy:toJavascript>",'', line)
+	if(m):
             line = ""
             m = m.groupdict()
             vardict.update({m['var_name'] : m['var_value']})
