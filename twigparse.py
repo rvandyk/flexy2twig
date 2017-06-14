@@ -2,7 +2,7 @@
 import re
 from collections import deque
 from collections import defaultdict
-from lxml import etree, html
+
 
 
 def difflog(fin,fout):
@@ -194,6 +194,5 @@ def parse(code):
 
 
         ret += line + "\n"
-    print(ret)
-    document = html.fromstring(ret)
-    return etree.tostring(document, encoding='unicode', pretty_print=True)
+
+    return ret
