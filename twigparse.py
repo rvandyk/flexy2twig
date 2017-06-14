@@ -97,7 +97,7 @@ def parse(code):
             line = re.sub(r"(flexy:if=\"([^\"]+)\")", "", line)
             t['args'] = re.sub(r"!","not ", t['args'])
             line = "{if " + t['args'] + "}" + "\n" + line + "\n{endif}"
-            foreachbox[t['tag']].append('if')
+
 
         #foreach in tags
         s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>[^\"]+)\")(.*)",line)
@@ -110,7 +110,7 @@ def parse(code):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
             line = res + '\n' + line + "\n{endfor}"
-            foreachbox[s['tag']].append('for')
+
 
 
 
@@ -171,7 +171,7 @@ def parse(code):
                     line = re.sub(r"[}]", " }}", line)
 
 
-            if(re.search(r"({% end)",line)):
+            if(re.search(r"({% end %})",line)):
                 line = re.sub(r"({% end)", "{% end" + currentbox.pop(), line)
             m = re.search(r"<flexy include src=(?P<src>.+)>",line)
             if(m):
