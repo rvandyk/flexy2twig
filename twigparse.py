@@ -47,9 +47,11 @@ def parse(code):
     for line in code.splitlines():
 
         #jump lines if necessary
-        for i in range (len(line)):
-            if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
-                line = line[:i] + "\n" + line[i:]
+        #for i in range (len(line)):
+            #if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
+                #line = line[:i] + "\n" + line[i:]
+        if(re.search(r"({(.*)}(.*){(.*)})+",line)):
+            line = re.sub("{", "\n{", line)
         med += line + "\n"
 
 
@@ -93,7 +95,8 @@ def parse(code):
         if(t):
             t = t.groupdict()
             line = re.sub(r"(flexy:if=\"([^\"]+)\")", "", line)
-            line = "{if " + t['args'] + "}" + "\n" + line
+            t['args'] = re.sub(r"!","not ", t['args'])
+            line = "{if " + t['args'] + "}" + "\n" + line + "\n{endif}"
             foreachbox[t['tag']].append('if')
 
         #foreach in tags
@@ -106,7 +109,7 @@ def parse(code):
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
-            line = res + '\n' + line
+            line = res + '\n' + line + "\n{endfor}"
             foreachbox[s['tag']].append('for')
 
 
@@ -176,7 +179,7 @@ def parse(code):
                 line = "{{ include (" + m['src'] +  ") }}"
             line = re.sub("</flexy include>", "", line)
             if(re.search(r"[#]",line)):
-                if(not(re.search(r"\"(.*)[#](.*)\"", line))):                    
+                if(not(re.search(r"\"(.*)[#](.*)\"", line))):
                     line = re.sub(r"\#", "\"", line)
 
 
