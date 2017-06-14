@@ -173,7 +173,16 @@ def parse(code):
                 if(not(re.search(r"\"(.*)[:](.*)\"", line))):
                     line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
-                if((re.search(r"for |if |end |else ", line)) and added_line == False):
+                if(added_line):
+                    ls = line.splitlines()
+                    print(ls)
+                    ls[0] = re.sub(r"[{]", "{% ", ls[0])
+                    ls[0] = re.sub(r"[}]", " %}",  ls[0])
+                    ls[1] = re.sub(r"[{]", "{{ ",  ls[1])
+                    ls[1] = re.sub(r"[}]", " }}", ls[1])
+                    line = ls[0] + "\n" + ls[1]
+                    print(line)
+                elif((re.search(r"for |if |end |else ", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
                 else:
