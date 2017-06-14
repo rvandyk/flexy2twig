@@ -2,6 +2,7 @@
 import re
 from collections import deque
 from collections import defaultdict
+from lxml import etree, html
 
 
 def difflog(fin,fout):
@@ -42,7 +43,7 @@ def parse(code):
     vardict = dict()
     script = False
     ret = ""
-    med= ""
+    med = ""
 
     for line in code.splitlines():
 
@@ -50,7 +51,7 @@ def parse(code):
         #for i in range (len(line)):
             #if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
                 #line = line[:i] + "\n" + line[i:]
-        if(re.search(r"({(.*)}(.*){(.*)})+",line)):
+        if(re.search(r"({(.*)}(.*){(.*)})+",line) or re.search(r"(<(.*)>(.*)<(.*)>)+",line)):
             line = re.sub("{", "\n{", line)
         med += line + "\n"
 
@@ -184,9 +185,6 @@ def parse(code):
 
 
 
-
-
-
         #script handler
         if(script):
             for key in vardict:
@@ -196,6 +194,6 @@ def parse(code):
 
 
         ret += line + "\n"
-
-
-    return ret
+    print(ret)
+    document = html.fromstring(ret)
+    return etree.tostring(document, encoding='unicode', pretty_print=True)
