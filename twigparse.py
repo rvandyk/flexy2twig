@@ -45,6 +45,7 @@ def parse(code):
     ret = ""
     med = ""
 
+
     for line in code.splitlines():
 
         #jump lines if necessary
@@ -60,6 +61,7 @@ def parse(code):
 
 
     for line in med.splitlines():
+        added_line = False  #line added by in-tag if/for ?
 
         #script detection
         if(re.search(r"<script type=\"text/javascript\">",line)):
@@ -104,6 +106,7 @@ def parse(code):
             else:
                 line = "{if " + t['args'] + "}" + "\n" + line
                 foreachbox[t['tag']].append('if')
+            added_line = True
 
 
         #foreach in tags
@@ -121,6 +124,7 @@ def parse(code):
             else:
                 line = res + '\n' + line
                 foreachbox[s['tag']].append('for')
+            added_line = True
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
@@ -169,7 +173,7 @@ def parse(code):
                 if(not(re.search(r"\"(.*)[:](.*)\"", line))):
                     line = re.sub(r"[:]", " ", line)
             if(re.search(r"{",line)):
-                if((re.search(r"for |if |end |else ", line))):
+                if((re.search(r"for |if |end |else ", line)) and added_line == False):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
                 else:
