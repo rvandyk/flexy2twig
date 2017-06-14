@@ -106,7 +106,7 @@ def parse(code):
             else:
                 line = "{if " + t['args'] + "}" + "\n" + line
                 foreachbox[t['tag']].append('if')
-            added_line = True
+                added_line = True
 
 
         #foreach in tags
@@ -124,7 +124,7 @@ def parse(code):
             else:
                 line = res + '\n' + line
                 foreachbox[s['tag']].append('for')
-            added_line = True
+                added_line = True
 
         #close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
@@ -175,13 +175,11 @@ def parse(code):
             if(re.search(r"{",line)):
                 if(added_line):
                     ls = line.splitlines()
-                    print(ls)
                     ls[0] = re.sub(r"[{]", "{% ", ls[0])
                     ls[0] = re.sub(r"[}]", " %}",  ls[0])
                     ls[1] = re.sub(r"[{]", "{{ ",  ls[1])
                     ls[1] = re.sub(r"[}]", " }}", ls[1])
-                    line = ls[0] + "\n" + ls[1]
-                    print(line)
+                    line = ls[0] + "\n" + ls[1]                    
                 elif((re.search(r"for |if |end |else ", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
