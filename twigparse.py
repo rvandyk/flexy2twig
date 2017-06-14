@@ -106,7 +106,7 @@ def parse(code):
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
-            line = res + '\n' + line            
+            line = res + '\n' + line
             foreachbox[s['tag']].append('for')
 
 
@@ -173,7 +173,7 @@ def parse(code):
             m = re.search(r"<flexy include src=(?P<src>.+)>",line)
             if(m):
                 m = m.groupdict()
-                line = "{{ include (" + m['src'] +  " }}"
+                line = "{{ include (" + m['src'] +  ") }}"
             line = re.sub("</flexy include>", "", line)
             line = re.sub(r"\#", "\"", line)
 
