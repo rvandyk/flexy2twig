@@ -89,25 +89,24 @@ def parse(code):
             currentbox.append("for")
 
         #if in tags
-        t = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>.+)\")",line)
+        t = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>[^\"]+)\")(.*)",line)
         if(t):
             t = t.groupdict()
-            line = re.sub(r"(flexy:if=\"(.+)\")", "", line)
+            line = re.sub(r"(flexy:if=\"([^\"]+)\")", "", line)
             line = "{if " + t['args'] + "}" + "\n" + line
             foreachbox[t['tag']].append('if')
 
         #foreach in tags
-        s = re.search(r"(<)(?P<tag>[^\s]+)(?P<argstag1>.*)(flexy:foreach=\"(?P<args>.+)\")(?P<argstag2>.*)",line)
+        s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>[^\"]+)\")(.*)",line)
         if(s):
             s = s.groupdict()
-            line = re.sub(r"(flexy:foreach=\"(.+)\")", "", line)
+            line = re.sub(r"(flexy:foreach=\"([^\"]+)\")",'', line)
             ex = re.split(',', s['args'])
             res = '{ for ' + ex[1]
             for i in range (2,len(ex)):
                 res += ','+ ex[i]
             res += ' in ' + ex[0] + " }"
-            line = res + '\n' + line
-            line += s['argstag1'] + s['argstag2']
+            line = res + '\n' + line            
             foreachbox[s['tag']].append('for')
 
 
