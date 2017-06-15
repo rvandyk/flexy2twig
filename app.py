@@ -5,6 +5,7 @@ import sys
 import os
 from tqdm import tqdm
 import platform
+import subprocess
 
 platform.system() == 'Linux'
 
@@ -33,13 +34,11 @@ if(len(sys.argv) == 4):
                         f_out = open(sys.argv[3] + '/' + name, 'w')
 
                     f_out.write(parse(f_in.read()))
-                    if(platform.system() == 'Linux'):
-                        fpath = os.path.realpath(f_out.name)
-                        x = os.system("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"")
-                        if(x):
-                            sys.exit("\n\n[!!] Error on file : " + fpath+"\n\nCommand failed : " + "iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"")
-                    f_in.close()
-                    f_out.close()
+                if(platform.system() == 'Linux'):
+                    fpath = os.path.realpath(f_out.name)
+                    subprocess.check_call("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"", shell=True)
+                f_in.close()
+                f_out.close()
 
 elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
