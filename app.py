@@ -7,6 +7,9 @@ from tqdm import tqdm
 import platform
 import subprocess
 
+sourceEncoding = "utf-8"
+targetEncoding = "iso-8859-15"
+
 platform.system() == 'Linux'
 
 if(len(sys.argv) == 4):
@@ -33,10 +36,7 @@ if(len(sys.argv) == 4):
                     else:
                         f_out = open(sys.argv[3] + '/' + name, 'w')
 
-                    f_out.write(parse(f_in.read()))
-                if(platform.system() == 'Linux'):
-                    fpath = os.path.realpath(f_out.name)
-                    subprocess.check_call("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"",cwd=os.path.dirname(os.path.realpath(__file__)), shell=True)
+                    f_out.write(unicode(parse(f_in.read()), sourceEncoding).encode(targetEncoding))
                 f_in.close()
                 f_out.close()
 
