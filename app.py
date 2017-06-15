@@ -33,10 +33,12 @@ if(len(sys.argv) == 4):
                         f_out = open(sys.argv[3] + '/' + name, 'w')
 
                     f_out.write(parse(f_in.read()))
-
                     if(platform.system() == 'Linux'):
                         fpath = os.path.realpath(f_out.name)
                         os.system("iconv -f \"utf8\"  -t \"iso-8859-15\" " + fpath + " -c -o " + fpath+".utf8" + " --silent && mv -f " + fpath+".utf8 " + fpath)
+                        print("** ICONV **\n")
+                        print(os.system("iconv -f \"utf8\"  -t \"iso-8859-15\" " + fpath + " -c -o " + fpath+".utf8" + " --silent && mv -f " + fpath+".utf8 " + fpath))
+                        print("\n***********\n")
                     f_in.close()
                     f_out.close()
 
