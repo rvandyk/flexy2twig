@@ -1,4 +1,4 @@
-# flexy2twig
+# FLEXY2TWIG
 
 Tool to convert flexy to twig files
 
