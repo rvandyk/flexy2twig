@@ -36,7 +36,7 @@ if(len(sys.argv) == 4):
                     f_out.write(parse(f_in.read()))
                 if(platform.system() == 'Linux'):
                     fpath = os.path.realpath(f_out.name)
-                    subprocess.check_call("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"", shell=True)
+                    subprocess.check_call("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"",cwd=os.path.dirname(os.path.realpath(__file__)), shell=True)
                 f_in.close()
                 f_out.close()
 
