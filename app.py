@@ -10,8 +10,6 @@ import subprocess
 
 encoding = "iso-8859-15"
 
-platform.system() == 'Linux'
-
 if(len(sys.argv) == 4):
     if(sys.argv[1] == '-c'):
         topdir = sys.argv[2]
