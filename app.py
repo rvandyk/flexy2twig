@@ -37,7 +37,7 @@ if(len(sys.argv) == 4):
                         fpath = os.path.realpath(f_out.name)
                         x = os.system("iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " --silent && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"")
                         if(x):
-                            sys.exit("\n\n[!!] Error on file : " + fpath+"\n\n")
+                            sys.exit("\n\n[!!] Error on file : " + fpath+"\n\nCommand failed : " + "iconv -f \"utf8\"  -t \"iso-8859-15\" " +"\""+fpath+"\"" + " -c -o " +"\""+fpath+".utf8\"" + " --silent && mv -f " + "\""+fpath+".utf8\" " + "\""+fpath+"\"")
                     f_in.close()
                     f_out.close()
 
