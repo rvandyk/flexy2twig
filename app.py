@@ -32,11 +32,11 @@ if(len(sys.argv) == 4):
                         os.makedirs(sys.argv[3] + '/' + p)
 
                     if(p != os.path.basename(os.path.normpath(topdir))):
-                        f_out = open(sys.argv[3] + '/' + p + '/' + name, 'w')
+                        f_out = open(sys.argv[3] + '/' + p + '/' + name, 'w', encoding=targetEncoding)
                     else:
-                        f_out = open(sys.argv[3] + '/' + name, 'w')
+                        f_out = open(sys.argv[3] + '/' + name, 'w', encoding=targetEncoding)
 
-                    f_out.write(str(parse(f_in.read())).encode(targetEncoding))
+                    f_out.write(str(parse(f_in.read())))
                 f_in.close()
                 f_out.close()
 
