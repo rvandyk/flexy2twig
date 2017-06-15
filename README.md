@@ -12,6 +12,9 @@ python app.py -c [in_folder] [out_folder]
 python app.py -s
 ```
 
+
+
+
 <pre>
 ─────────▄──────────────▄
 ────────▌▒█───────────▄▀▒▌
