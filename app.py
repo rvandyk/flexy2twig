@@ -7,8 +7,8 @@ from tqdm import tqdm
 import platform
 import subprocess
 
-sourceEncoding = "utf-8"
-targetEncoding = "iso-8859-15"
+
+encoding = "iso-8859-15"
 
 platform.system() == 'Linux'
 
@@ -25,16 +25,16 @@ if(len(sys.argv) == 4):
             for name in tqdm(files):
                 if name.lower().endswith(exten):
                     f_in = open(os.path.join(dirpath, name),
-                                'r', encoding='iso8859-15')
+                                'r', encoding=encoding)
                     p = os.path.basename(os.path.normpath(dirpath))
 
                     if(not os.path.exists(sys.argv[3] + '/' + p) and (p != os.path.basename(os.path.normpath(topdir)))):
                         os.makedirs(sys.argv[3] + '/' + p)
 
                     if(p != os.path.basename(os.path.normpath(topdir))):
-                        f_out = open(sys.argv[3] + '/' + p + '/' + name, 'w', encoding=targetEncoding)
+                        f_out = open(sys.argv[3] + '/' + p + '/' + name, 'w', encoding=encoding)
                     else:
-                        f_out = open(sys.argv[3] + '/' + name, 'w', encoding=targetEncoding)
+                        f_out = open(sys.argv[3] + '/' + name, 'w', encoding=encoding)
 
                     f_out.write(str(parse(f_in.read())))
                 f_in.close()
