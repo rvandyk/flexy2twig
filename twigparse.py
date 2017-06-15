@@ -4,13 +4,12 @@ from collections import deque
 from collections import defaultdict
 
 
-
-def difflog(fin,fout):
+def difflog(fin, fout):
     n = 0
     with open(fin, 'r') as file1:
         with open(fout, 'r') as file2:
-                with open('log.txt', 'w') as file_out:
-                    art = '''
+            with open('log.txt', 'w') as file_out:
+                art = '''
   _____ ____ _____   ____ ___ _____ _____   _     ___   ____
  |  ___|___ \_   _| |  _ \_ _|  ___|  ___| | |   / _ \ / ___|
  | |_    __) || |   | | | | || |_  | |_    | |  | | | | |  _
@@ -18,22 +17,28 @@ def difflog(fin,fout):
  |_|   |_____||_|   |____/___|_|   |_|     |_____\___/ \____|
 
                    '''
-                    file_out.write(art + "\n\n\n\n")
-                    while(True):
-                        n += 1
-                        l1 = file1.readline()
-                        l2 = file2.readline()
-                        if(not l1):
-                            file_out.write("\n\n\n#######\nLINE " + str(n) + "\n#######\n\n\n")
-                            file_out.write("FLEXY : NOTHING" + "\n====TWIG====> " + l2 + "\n\n--------------------------------------------------------------")
-                        if(not l2):
-                            file_out.write("\n\n\n#######\nLINE " + str(n) + "\n#######\n\n\n")
-                            file_out.write("FLEXY : " + l1 +  " \n====TWIG====> " + "NOTHING" + "\n\n--------------------------------------------------------------")
-                        if((not l1) and (not l2)):
-                            break
-                        if(l1 != l2):
-                            file_out.write("\n\n\n#######\nLINE " + str(n) + "\n#######\n\n\n")
-                            file_out.write("FLEXY : " + l1 +  " \n====TWIG====> " + l2 + "\n\n--------------------------------------------------------------")
+                file_out.write(art + "\n\n\n\n")
+                while(True):
+                    n += 1
+                    l1 = file1.readline()
+                    l2 = file2.readline()
+                    if(not l1):
+                        file_out.write("\n\n\n#######\nLINE " +
+                                       str(n) + "\n#######\n\n\n")
+                        file_out.write("FLEXY : NOTHING" + "\n====TWIG====> " + l2 +
+                                       "\n\n--------------------------------------------------------------")
+                    if(not l2):
+                        file_out.write("\n\n\n#######\nLINE " +
+                                       str(n) + "\n#######\n\n\n")
+                        file_out.write("FLEXY : " + l1 + " \n====TWIG====> " + "NOTHING" +
+                                       "\n\n--------------------------------------------------------------")
+                    if((not l1) and (not l2)):
+                        break
+                    if(l1 != l2):
+                        file_out.write("\n\n\n#######\nLINE " +
+                                       str(n) + "\n#######\n\n\n")
+                        file_out.write("FLEXY : " + l1 + " \n====TWIG====> " + l2 +
+                                       "\n\n--------------------------------------------------------------")
 
 
 def parse(code):
@@ -45,62 +50,61 @@ def parse(code):
     ret = ""
     med = ""
 
-
     for line in code.splitlines():
 
-        #jump lines if necessary
-        #for i in range (len(line)):
-            #if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
-                #line = line[:i] + "\n" + line[i:]
-        if(re.search(r"({(.*)}(.*){(.*)})+",line)):
+        # jump lines if necessary
+        # for i in range (len(line)):
+            # if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
+            #line = line[:i] + "\n" + line[i:]
+        if(re.search(r"({(.*)}(.*){(.*)})+", line)):
             line = re.sub("{", "\n{", line)
-        if(re.search(r"(<(.*)>(.*)<(.*)>)+",line)):
+        if(re.search(r"(<(.*)>(.*)<(.*)>)+", line)):
             line = re.sub("<", "\n<", line)
         med += line + "\n"
 
-
-
     for line in med.splitlines():
-        added_line = False  #line added by in-tag if/for ?
+        added_line = False  # line added by in-tag if/for ?
 
-        #script detection
-        if(re.search(r"<script type=\"text/javascript\">",line)):
+        # script detection
+        if(re.search(r"<script type=\"text/javascript\">", line)):
             script = True
-        if(re.search(r"</script>",line)):
+        if(re.search(r"</script>", line)):
             script = False
 
-        #var declarations
-        m = re.search(r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}>",line)
-        line = re.sub(r"</flexy:toJavascript>",'', line)
+        # var declarations
+        m = re.search(
+            r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}>", line)
+        line = re.sub(r"</flexy:toJavascript>", '', line)
         if(m):
             line = ""
             m = m.groupdict()
-            vardict.update({m['var_name'] : m['var_value']})
+            vardict.update({m['var_name']: m['var_value']})
 
-        #loops/conditions handler
+        # loops/conditions handler
 
-        #if
+        # if
         if(re.search(r"({if)", line)):
             line = re.sub(r"(!)", " not ", line)
             currentbox.append("if")
 
-        #foreach
+        # foreach
         if(re.search(r"({foreach)", line)):
-            ex = re.split('foreach|\t|,|:|{|}|\n',line)
+            ex = re.split('foreach|\t|,|:|{|}|\n', line)
             ex = [x for x in ex if x.replace(" ", "") != '']
             res = '{ for ' + ex[1]
-            for i in range (2,len(ex)):
-                res += ','+ ex[i]
+            for i in range(2, len(ex)):
+                res += ',' + ex[i]
             res += ' in ' + ex[0] + " }"
             line = re.sub(r"({foreach:)(.*)[}]+", res, line)
             currentbox.append("for")
 
-        #if in tags
-        t = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>[^\"]+)\")(.*)",line)
+        # if in tags
+        t = re.search(
+            r"(<)(?P<tag>[^\s]+)(.*)(flexy:if=\"(?P<args>[^\"]+)\")(.*)", line)
         if(t):
             t = t.groupdict()
             line = re.sub(r"(flexy:if=\"([^\"]+)\")", "", line)
-            t['args'] = re.sub(r"!","not ", t['args'])
+            t['args'] = re.sub(r"!", "not ", t['args'])
             if(t['tag'] == "meta"):
                 line = "{if " + t['args'] + "}" + "\n" + line + "\n{endif}"
             else:
@@ -108,16 +112,16 @@ def parse(code):
                 foreachbox[t['tag']].append('if')
                 added_line = True
 
-
         #foreach in tags
-        s = re.search(r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>[^\"]+)\")(.*)",line)
+        s = re.search(
+            r"(<)(?P<tag>[^\s]+)(.*)(flexy:foreach=\"(?P<args>[^\"]+)\")(.*)", line)
         if(s):
             s = s.groupdict()
-            line = re.sub(r"(flexy:foreach=\"([^\"]+)\")",'', line)
+            line = re.sub(r"(flexy:foreach=\"([^\"]+)\")", '', line)
             ex = re.split(',', s['args'])
             res = '{ for ' + ex[1]
-            for i in range (2,len(ex)):
-                res += ','+ ex[i]
+            for i in range(2, len(ex)):
+                res += ',' + ex[i]
             res += ' in ' + ex[0] + " }"
             if(s['tag'] == "meta"):
                 line = res + '\n' + line + "\n{endfor}"
@@ -126,14 +130,13 @@ def parse(code):
                 foreachbox[s['tag']].append('for')
                 added_line = True
 
-        #close tag
+        # close tag
         s = re.search(r"(<(?P<tag>.+)>)", line)
         if(s):
             s = s.groupdict()
             if('tag' in s):
                 if((s['tag'] in foreachbox)):
                     foreachbox[s['tag']].append('')
-
 
         s = re.search(r"(</(?P<tag>.+)>)", line)
         if(s):
@@ -143,8 +146,7 @@ def parse(code):
                 if(d != ''):
                     line = line + "\n" + "{ end" + d + " }"
 
-
-        #filters
+        # filters
 
         line = re.sub(r"(:h)", "|raw", line)
         line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
@@ -167,19 +169,19 @@ def parse(code):
         line = re.sub(r"(:hidden)", "|bao_hidden", line)
         line = re.sub(r"(:visible)", "|bao_visible", line)
 
-        #not script handler
+        # not script handler
         if(not script):
-            if(re.search(r"[:]",line)):
+            if(re.search(r"[:]", line)):
                 if(not(re.search(r"\"(.*)[:](.*)\"", line))):
                     line = re.sub(r"[:]", " ", line)
-            if(re.search(r"{",line)):
+            if(re.search(r"{", line)):
                 if(added_line):
                     ls = line.splitlines()
                     ls[0] = re.sub(r"[{]", "{% ", ls[0])
                     ls[0] = re.sub(r"[}]", " %}",  ls[0])
                     ls[1] = re.sub(r"[{]", "{{ ",  ls[1])
                     ls[1] = re.sub(r"[}]", " }}", ls[1])
-                    line = ls[0] + "\n" + ls[1]                    
+                    line = ls[0] + "\n" + ls[1]
                 elif((re.search(r"for |if |end |else ", line))):
                     line = re.sub(r"[{]", "{% ", line)
                     line = re.sub(r"[}]", " %}", line)
@@ -187,27 +189,22 @@ def parse(code):
                     line = re.sub(r"[{]", "{{ ", line)
                     line = re.sub(r"[}]", " }}", line)
 
-
-            if(re.search(r"({% end  %})",line)):
+            if(re.search(r"({% end  %})", line)):
                 line = re.sub(r"({% end)", "{% end" + currentbox.pop(), line)
-            m = re.search(r"<flexy include src=(?P<src>.+)>",line)
+            m = re.search(r"<flexy include src=(?P<src>.+)>", line)
             if(m):
                 m = m.groupdict()
-                line = "{{ include (" + m['src'] +  ") }}"
+                line = "{{ include (" + m['src'] + ") }}"
             line = re.sub("</flexy include>", "", line)
-            if(re.search(r"[#]",line)):
+            if(re.search(r"[#]", line)):
                 if(not(re.search(r"\"(.*)[#](.*)\"", line))):
                     line = re.sub(r"\#", "\"", line)
 
-
-
-        #script handler
+        # script handler
         if(script):
             for key in vardict:
-                line = re.sub(r"(" + re.escape(key) + r")", "{{ " + vardict[key] + " }}", line)
-
-
-
+                line = re.sub(r"(" + re.escape(key) + r")",
+                              "{{ " + vardict[key] + " }}", line)
 
         ret += line + "\n"
 

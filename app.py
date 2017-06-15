@@ -17,19 +17,17 @@ if(len(sys.argv) == 4):
             print("Folder found : " + dirpath)
             for name in tqdm(files):
                 if name.lower().endswith(exten):
-                    f_in = open(os.path.join(dirpath, name),'r',encoding='iso8859-15')
+                    f_in = open(os.path.join(dirpath, name),
+                                'r', encoding='iso8859-15')
                     p = os.path.basename(os.path.normpath(dirpath))
 
-
-                    if(not os.path.exists(sys.argv[3] +'/' + p) and (p != os.path.basename(os.path.normpath(topdir)))):
-                        os.makedirs(sys.argv[3] +'/' + p)
+                    if(not os.path.exists(sys.argv[3] + '/' + p) and (p != os.path.basename(os.path.normpath(topdir)))):
+                        os.makedirs(sys.argv[3] + '/' + p)
 
                     if(p != os.path.basename(os.path.normpath(topdir))):
-                        f_out = open(sys.argv[3] +'/' + p +'/'+name,'w')
+                        f_out = open(sys.argv[3] + '/' + p + '/' + name, 'w')
                     else:
-                        f_out = open(sys.argv[3] +'/' + name,'w')
-
-
+                        f_out = open(sys.argv[3] + '/' + name, 'w')
 
                     f_out.write(parse(f_in.read()))
                     f_in.close()
@@ -39,8 +37,6 @@ elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
     app = Flask(__name__)
 
-
-
     @app.route('/data', methods=["POST"])
     def data():
         flexy = str(request.form.get('flexycode'))
@@ -48,7 +44,6 @@ elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
         parsed = parse(flexy)
         return render_template('cp.html', res=parsed, flex=flexy)
-
 
     @app.route('/')
     def index():
@@ -58,9 +53,8 @@ elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
     def cp():
         return render_template('cp.html')
 
-
     if __name__ == '__main__':
-        app.run(host='127.0.0.1',debug = True,port=80)
+        app.run(host='127.0.0.1', debug=True, port=80)
 else:
     print('ERROR : incorrect arguments')
     print('-s                           : server mode')
