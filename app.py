@@ -36,7 +36,7 @@ if(len(sys.argv) == 4):
                     else:
                         f_out = open(sys.argv[3] + '/' + name, 'w')
 
-                    f_out.write(unicode(parse(f_in.read()), sourceEncoding).encode(targetEncoding))
+                    f_out.write(str(parse(f_in.read()), sourceEncoding).encode(targetEncoding))
                 f_in.close()
                 f_out.close()
 
