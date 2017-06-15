@@ -3,10 +3,14 @@
 Tool to convert flexy to twig files
 
 ## Convert folders
+```
 python app.py -c [in_folder] [out_folder]
+```
 
 ## Web app
+```
 python app.py -s
+```
 
 <pre>
 ─────────▄──────────────▄
