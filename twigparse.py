@@ -118,6 +118,7 @@ def var_declarations(line):
         line = ""
         m = m.groupdict()
         vardict.update({m['var_name']: m['var_value']})
+    return line
 
 
 def cond_loops_handler(line):
