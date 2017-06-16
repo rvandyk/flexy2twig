@@ -201,6 +201,9 @@ def cond_loops_handler(line):
 
 
 def parse(code):
+    """
+    Parses full code
+    """
 
     script = False
     ret = ""
