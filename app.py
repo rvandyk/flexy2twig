@@ -7,9 +7,9 @@ from tqdm import tqdm
 import platform
 import subprocess
 
-
 encoding = "iso-8859-15"
 
+#console mode
 if(len(sys.argv) == 4):
     if(sys.argv[1] == '-c'):
         topdir = sys.argv[2]
@@ -38,6 +38,7 @@ if(len(sys.argv) == 4):
                 f_in.close()
                 f_out.close()
 
+#web mode
 elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
     app = Flask(__name__)
@@ -60,6 +61,8 @@ elif(len(sys.argv) == 2 and sys.argv[1] == '-s'):
 
     if __name__ == '__main__':
         app.run(host='127.0.0.1', debug=True, port=80)
+
+#help
 else:
     print('ERROR : incorrect arguments')
     print('-s                           : server mode')
