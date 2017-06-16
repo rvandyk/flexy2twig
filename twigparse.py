@@ -3,7 +3,6 @@ import re
 from collections import deque
 from collections import defaultdict
 
-
 currentbox = deque()
 foreachbox = defaultdict(deque)
 vardict = dict()
@@ -73,6 +72,7 @@ def script_handler(line):
                       "{{ " + vardict[key] + " }}", line)
     return line
 
+
 def nscript_handler(line):
     """
     Not-script blocks handler
@@ -110,6 +110,9 @@ def nscript_handler(line):
 
 
 def var_declarations(line):
+    """
+    Handles js var declarations (outside script blocks)
+    """
     global vardict
     m = re.search(
         r"<flexy:toJavascript (?P<var_name>.+)={(?P<var_value>.+)}>", line)
@@ -217,7 +220,6 @@ def parse(code):
         line = cond_loops_handler(line)
 
         line = sub_filters(line)
-
 
         if(not script):
             line = nscript_handler(line)
