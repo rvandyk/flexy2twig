@@ -3,6 +3,51 @@ import re
 from collections import deque
 from collections import defaultdict
 
+
+def jump_lines(code):
+    res = ""
+    for line in code.splitlines():
+
+        if(re.search(r"({(.*)}(.*){(.*)})+", line)):
+            line = re.sub("{", "\n{", line)
+        if(re.search(r"(<(.*)>(.*)<(.*)>)+", line)):
+            line = re.sub("<", "\n<", line)
+        res += line + "\n"
+    return res
+
+
+def detect_script(line):
+    script = False
+    if(re.search(r"<script type=\"text/javascript\">", line)):
+        script = True
+    if(re.search(r"</script>", line)):
+        script = False
+    return script
+
+def sub_filters(line):
+    line = re.sub(r"(:h)", "|raw", line)
+    line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
+    line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
+    line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
+    line = re.sub(r"(:u)", "|urlencode", line)
+    line = re.sub(r"(:n)", "|number_format", line)
+    line = re.sub(r"(:b)", "|nl2br", line)
+    line = re.sub(r"(:float)", "|bao_float", line)
+    line = re.sub(r"(:int)", "|bao_int", line)
+    line = re.sub(r"(:date)", "|bao_date", line)
+    line = re.sub(r"(:time)", "|bao_time", line)
+    line = re.sub(r"(:lowercase)", "|bao_lowercase", line)
+    line = re.sub(r"(:trim)", "|bao_trim", line)
+    line = re.sub(r"(:text)", "|bao_text", line)
+    line = re.sub(r"(:length)", "|bao_length", line)
+    line = re.sub(r"(:phone)", "|bao_phone", line)
+    line = re.sub(r"(:price)", "|bao_price", line)
+    line = re.sub(r"(:rate)", "|bao_rate", line)
+    line = re.sub(r"(:hidden)", "|bao_hidden", line)
+    line = re.sub(r"(:visible)", "|bao_visible", line)
+    return line
+
+
 def parse(code):
 
     currentbox = deque()
@@ -10,28 +55,15 @@ def parse(code):
     vardict = dict()
     script = False
     ret = ""
-    med = ""
+    content = ""
 
-    for line in code.splitlines():
+    content = jump_lines(code)
 
-        # jump lines if necessary
-        # for i in range (len(line)):
-            # if((line[i] == "{" and line[i-1] == "}") or (line[i] == "<" and line[i-1] == ">")):
-            #line = line[:i] + "\n" + line[i:]
-        if(re.search(r"({(.*)}(.*){(.*)})+", line)):
-            line = re.sub("{", "\n{", line)
-        if(re.search(r"(<(.*)>(.*)<(.*)>)+", line)):
-            line = re.sub("<", "\n<", line)
-        med += line + "\n"
+    for line in content.splitlines():
 
-    for line in med.splitlines():
         added_line = False  # line added by in-tag if/for ?
 
-        # script detection
-        if(re.search(r"<script type=\"text/javascript\">", line)):
-            script = True
-        if(re.search(r"</script>", line)):
-            script = False
+        script = detect_script(line)
 
         # var declarations
         m = re.search(
@@ -108,28 +140,8 @@ def parse(code):
                 if(d != ''):
                     line = line + "\n" + "{ end" + d + " }"
 
-        # filters
-
-        line = re.sub(r"(:h)", "|raw", line)
-        line = re.sub(r"(:uppercase)", "|bao_uppercase", line)
-        line = re.sub(r"(:ucfirst)", "|bao_ucfirst", line)
-        line = re.sub(r"(:ucwords)", "|bao_ucwords", line)
-        line = re.sub(r"(:u)", "|urlencode", line)
-        line = re.sub(r"(:n)", "|number_format", line)
-        line = re.sub(r"(:b)", "|nl2br", line)
-        line = re.sub(r"(:float)", "|bao_float", line)
-        line = re.sub(r"(:int)", "|bao_int", line)
-        line = re.sub(r"(:date)", "|bao_date", line)
-        line = re.sub(r"(:time)", "|bao_time", line)
-        line = re.sub(r"(:lowercase)", "|bao_lowercase", line)
-        line = re.sub(r"(:trim)", "|bao_trim", line)
-        line = re.sub(r"(:text)", "|bao_text", line)
-        line = re.sub(r"(:length)", "|bao_length", line)
-        line = re.sub(r"(:phone)", "|bao_phone", line)
-        line = re.sub(r"(:price)", "|bao_price", line)
-        line = re.sub(r"(:rate)", "|bao_rate", line)
-        line = re.sub(r"(:hidden)", "|bao_hidden", line)
-        line = re.sub(r"(:visible)", "|bao_visible", line)
+        
+        line = sub_filters(line)
 
         # not script handler
         if(not script):
