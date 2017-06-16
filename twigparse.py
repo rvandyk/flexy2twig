@@ -24,11 +24,10 @@ def jump_lines(code):
     return res
 
 
-def detect_script(line):
+def detect_script(line,script):
     """
     Detects script blocks
     """
-    script = False
     if(re.search(r"<script type=\"text/javascript\">", line)):
         script = True
     if(re.search(r"</script>", line)):
@@ -216,7 +215,7 @@ def parse(code):
 
         added_line = False  # line added by in-tag if/for ?
 
-        script = detect_script(line)
+        script = detect_script(line,script)
 
         line = var_declarations(line)
 
